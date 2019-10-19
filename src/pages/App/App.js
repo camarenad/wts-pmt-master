@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
+import Test from '../Test';
 
 class App extends Component {
   constructor() {
@@ -19,12 +20,11 @@ class App extends Component {
                 this.state.user && this.state.role === 'admin' ? (
                   <React.Fragment>
                     <NavBar {...props} />
-                    <div>Ok awesome</div>
                   </React.Fragment>
                 ) : this.state.user && this.state.role === 'manager' ? (
                   <React.Fragment>
                     <h1>Manager View</h1>
-                    </React.Fragment>
+                  </React.Fragment>
                 ) : this.state.user && this.state.role === 'tech' ? (
                   <React.Fragment>
                     <h1>tech view</h1>
