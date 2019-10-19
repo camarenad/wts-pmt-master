@@ -1,25 +1,42 @@
 import React, { Component } from 'react';
 import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
-// import AppBar from '@material-ui/core/AppBar';
-// import Toolbar from '@material-ui/core/Toolbar';
-// import Typography from '@material-ui/core/Typography';
-// import Button from '@material-ui/core/Button';
-// import IconButton from '@material-ui/core/IconButton';
-// import MenuIcon from '@material-ui/icons/Menu';
-// import Drawer from '@material-ui/core/Drawer';
-// import MenuItem from '@material-ui/core/MenuItem';
 
 class App extends Component {
   constructor() {
     super();
-    this.state = { open: false };
+    this.state = { user: true, role: 'admin' };
   }
-
-  handleToggle = () => this.setState({ open: !this.state.open });
   render() {
     return (
-     <NavBar />
+      <BrowserRouter>
+        <Switch>
+          <Route>
+            <Route
+              exact
+              path='/'
+              render={props =>
+                this.state.user && this.state.role === 'admin' ? (
+                  <React.Fragment>
+                    <NavBar {...props} />
+                    <div>Ok awesome</div>
+                  </React.Fragment>
+                ) : this.state.user && this.state.role === 'manager' ? (
+                  <React.Fragment>
+                    <h1>Manager View</h1>
+                    </React.Fragment>
+                ) : this.state.user && this.state.role === 'tech' ? (
+                  <React.Fragment>
+                    <h1>tech view</h1>
+                  </React.Fragment>
+                ) : (
+                  <h1>sorry</h1>
+                )
+              }
+            />
+          </Route>
+        </Switch>
+      </BrowserRouter>
     );
   }
 }
