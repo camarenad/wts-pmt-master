@@ -38,7 +38,7 @@ class LoginPage extends Component {
           // ...
         });
       await this.props.handleLogin();
-      this.props.history.push('/form');
+      this.props.history.push('/admin');
     } catch (err) {
       console.log(err);
     }
