@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 import Test from '../Test';
+import LoginPage from '../LoginPage/LoginPage';
+import IndexView from '../IndexView/IndexView'
 
 class App extends Component {
   constructor() {
@@ -12,29 +14,20 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route>
             <Route
               exact
               path='/'
               render={props =>
-                this.state.user && this.state.role === 'admin' ? (
-                  <React.Fragment>
-                    <NavBar {...props} />
-                  </React.Fragment>
-                ) : this.state.user && this.state.role === 'manager' ? (
-                  <React.Fragment>
-                    <h1>Manager View</h1>
-                  </React.Fragment>
-                ) : this.state.user && this.state.role === 'tech' ? (
-                  <React.Fragment>
-                    <h1>tech view</h1>
-                  </React.Fragment>
-                ) : (
-                  <h1>sorry</h1>
-                )
+               <LoginPage />
               }
             />
-          </Route>
+            <Route
+              exact
+              path='/'
+              render={props =>
+               <IndexView />
+              }
+            />
         </Switch>
       </BrowserRouter>
     );

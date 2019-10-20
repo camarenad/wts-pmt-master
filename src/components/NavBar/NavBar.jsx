@@ -62,7 +62,7 @@ componentDidMount(){
           onClose={this.handleToggle}
         >
           <div style={{ width: 250 }}>
-            <MenuItem style={menuMargin}>View Job Completion Forms</MenuItem>
+            <MenuItem href='/test'  style={menuMargin}><a href='/test'>View Job Completion Forms</a></MenuItem>
             <MenuItem style={menuMargin}>Upload Work Order</MenuItem>
           </div>
         </Drawer>
