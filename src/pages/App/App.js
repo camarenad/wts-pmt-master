@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, Switch, BrowserRouter } from 'react-router-dom';
+import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 import LoginPage from '../LoginPage/LoginPage';
 import AdminPage from '../AdminPage/AdminPage';
@@ -52,7 +52,17 @@ class App extends Component {
               <LoginPage history={history} handleLogin={this.handleLogin} />
             )}
           />
-          <Route path='/admin' component={AdminPage} />
+          <Route
+            exact
+            path='/admin'
+            render={props =>
+              firebase.auth().currentUser ? (
+                <AdminPage {...props} />
+              ) : (
+                <Redirect to='/' />
+              )
+            }
+          />
         </Switch>
       </BrowserRouter>
     );
