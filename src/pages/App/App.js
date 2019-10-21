@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import { Route, Switch, BrowserRouter, Redirect } from 'react-router-dom';
+import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
-import Test from '../Test';
 import LoginPage from '../LoginPage/LoginPage';
-import IndexView from '../IndexView/IndexView';
+import AdminPage from '../AdminPage/AdminPage'
 import firebase from '../../firebase/firebase';
 import 'firebase/auth';
 
@@ -51,7 +50,7 @@ class App extends Component {
               <LoginPage history={history} handleLogin={this.handleLogin} />
             )}
           />
-          <Route exact path='/admin' render={props => <IndexView props={props} />} />
+          <Route path='/admin' component={AdminPage} />
         </Switch>
       </BrowserRouter>
     );
