@@ -13,7 +13,7 @@ class AdminComponent extends Component {
         {this.props.reports
           ? this.props.reports.map(function(item, index) {
               return (
-                <Card key={index}>
+                <Card key={index} style={{ margin: '40px 0 25px 0' }}>
                   <CardActionArea>
                     <CardMedia
                       component='img'
@@ -27,7 +27,11 @@ class AdminComponent extends Component {
                         {item.bidZone}
                       </Typography>
                       <br></br>
-                      <Typography gutterBottom variant='subtitle2' component='h4'>
+                      <Typography
+                        gutterBottom
+                        variant='subtitle2'
+                        component='h4'
+                      >
                         ID: {item.jobId}
                       </Typography>
                       <br></br>
