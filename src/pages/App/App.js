@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Route, Switch, BrowserRouter } from 'react-router-dom';
 import NavBar from '../../components/NavBar/NavBar';
 import LoginPage from '../LoginPage/LoginPage';
-import AdminPage from '../AdminPage/AdminPage'
+import AdminPage from '../AdminPage/AdminPage';
 import firebase from '../../firebase/firebase';
 import 'firebase/auth';
 
@@ -37,11 +37,13 @@ class App extends Component {
         // An error happened.
         console.log(error);
       });
+    window.location = '/';
   };
+
   render() {
     return (
       <BrowserRouter>
-        <NavBar />
+        <NavBar handleLogout={this.handleLogout} />
         <Switch>
           <Route
             exact

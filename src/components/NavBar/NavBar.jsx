@@ -8,20 +8,17 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Drawer from '@material-ui/core/Drawer';
 import MenuItem from '@material-ui/core/MenuItem';
 
-
-
-
 class NavBar extends Component {
   constructor() {
     super();
-    this.state = { open: false , user:'', role:''};
+    this.state = { open: false, user: '', role: '' };
   }
-componentDidMount(){
+  componentDidMount() {
     this.setState({
-        user:this.props.user,
-        role:this.props.role
-    })
-}
+      user: this.props.user,
+      role: this.props.role
+    });
+  }
   handleToggle = () => this.setState({ open: !this.state.open });
   render() {
     const menuMargin = {
@@ -53,7 +50,9 @@ componentDidMount(){
             >
               Wireless Tech
             </Typography>
-            <Button color='inherit'>Log Out</Button>
+            <Button onClick={this.props.handleLogout} color='inherit'>
+              Log Out
+            </Button>
           </Toolbar>
         </AppBar>
         <Drawer
@@ -62,7 +61,9 @@ componentDidMount(){
           onClose={this.handleToggle}
         >
           <div style={{ width: 250 }}>
-            <MenuItem href='/test'  style={menuMargin}><a href='/test'>View Job Completion Forms</a></MenuItem>
+            <MenuItem href='/test' style={menuMargin}>
+              <a href='/test'>View Job Completion Forms</a>
+            </MenuItem>
             <MenuItem style={menuMargin}>Upload Work Order</MenuItem>
           </div>
         </Drawer>
