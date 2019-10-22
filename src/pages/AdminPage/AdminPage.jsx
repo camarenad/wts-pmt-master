@@ -22,7 +22,7 @@ class AdminPage extends Component {
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  componentWillMount = async () => {
+  componentDidMount = async () => {
     const self = this;
     const db = firebase.firestore();
     const reports = db.collection('job-completion-report');
