@@ -12,6 +12,7 @@ class AdminComponent extends Component {
       <div>
         {this.props.reports
           ? this.props.reports.map(function(item, index) {
+            let photo = item.photoRefs ? item.photoRefs[0].toString() : ''
               return (
                 <Card key={index} style={{ margin: '40px 0 25px 0' }}>
                   <CardActionArea>
@@ -19,7 +20,7 @@ class AdminComponent extends Component {
                       component='img'
                       alt='Work Image'
                       height='140'
-                      src={item.photoRefs}
+                      src={photo}
                       title='Work Image'
                     />
                     <CardContent>
