@@ -4,7 +4,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import LoginPage from '../LoginPage/LoginPage';
 import AdminPage from '../AdminPage/AdminPage';
 import firebase from '../../firebase/firebase';
-import ProtectedRoutes from '../../ProtectedRoutes';
+
 import 'firebase/auth';
 
 class App extends Component {
