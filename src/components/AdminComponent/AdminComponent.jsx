@@ -19,7 +19,7 @@ class AdminComponent extends Component {
                       component='img'
                       alt='Work Image'
                       height='140'
-                      src={item.photoRefs[0].toString()}
+                      src={item.photoRefs ? item.photoRefs[0].toString() : ''}
                       title='Work Image'
                     />
                     <CardContent>

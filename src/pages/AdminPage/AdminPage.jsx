@@ -4,6 +4,7 @@ import Container from '@material-ui/core/Container';
 import AdminComponent from '../../components/AdminComponent/AdminComponent';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import firebase from '../../firebase/firebase';
+import 'firebase/auth' 
 
 const reportList = [];
 
@@ -21,7 +22,7 @@ class AdminPage extends Component {
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  componentDidMount = async () => {
+  componentWillMount = async () => {
     const self = this;
     const db = firebase.firestore();
     const reports = db.collection('job-completion-report');

@@ -4,6 +4,7 @@ import NavBar from '../../components/NavBar/NavBar';
 import LoginPage from '../LoginPage/LoginPage';
 import AdminPage from '../AdminPage/AdminPage';
 import firebase from '../../firebase/firebase';
+import ProtectedRoutes from '../../ProtectedRoutes';
 import 'firebase/auth';
 
 class App extends Component {
@@ -57,11 +58,13 @@ class App extends Component {
           <Route
             exact
             path='/'
-            render={({ history }) => ( !this.state.user ?
-              <LoginPage history={history} handleLogin={this.handleLogin} />
-              : 
-              <Redirect to='/admin' />
-            )}
+            render={({ history }) =>
+              !this.state.user ? (
+                <LoginPage history={history} handleLogin={this.handleLogin} />
+              ) : (
+                <Redirect to='/admin' />
+              )
+            }
           />
           <Route
             exact
