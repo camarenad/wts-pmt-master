@@ -10,8 +10,11 @@ class App extends Component {
   constructor() {
     super();
     this.handleLogin = this.handleLogin.bind(this);
+    this.handleLogout = this.handleLogout.bind(this);
+    this.handleToggle = this.handleToggle.bind(this);
     this.state = {
-      user: firebase.auth().currentUser
+      user: firebase.auth().currentUser,
+      toggleMenu: false
     };
   }
   componentDidMount = async () => {
@@ -21,6 +24,7 @@ class App extends Component {
       }
     });
   };
+  handleToggle = () => this.setState({ toggleMenu: !this.state.toggleMenu });
   handleLogin = async () => {
     var user = await firebase.auth().currentUser;
     this.setState({ user: user });
@@ -43,13 +47,20 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter>
-        <NavBar handleLogout={this.handleLogout} />
+        <NavBar
+          user={firebase.auth().currentUser}
+          handleToggle={this.handleToggle}
+          state={this.state.toggleMenu}
+          handleLogout={this.handleLogout}
+        />
         <Switch>
           <Route
             exact
             path='/'
-            render={({ history }) => (
+            render={({ history }) => ( !this.state.user ?
               <LoginPage history={history} handleLogin={this.handleLogin} />
+              : 
+              <Redirect to='/admin' />
             )}
           />
           <Route

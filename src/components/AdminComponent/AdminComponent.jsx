@@ -42,7 +42,6 @@ class AdminComponent extends Component {
                       >
                         {item.jobLocation}
                       </Typography>
-
                       <br></br>
                       <Typography
                         variant='body2'
