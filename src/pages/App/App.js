@@ -14,7 +14,7 @@ class App extends Component {
     this.handleLogout = this.handleLogout.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.state = {
-      user: firebase.auth.currentUser,
+      user: firebase.auth().currentUser,
       toggleMenu: false
     };
   }
@@ -28,7 +28,7 @@ class App extends Component {
     });
   };
   handleToggle = () => this.setState({ toggleMenu: !this.state.toggleMenu });
-  handleLogin = async () => {
+  async handleLogin() {
     var user = await firebase.auth().currentUser;
     this.setState({ user: user });
   };
