@@ -24,10 +24,10 @@ class LoginPage extends Component {
       [e.target.name]: e.target.value
     });
   };
-  handleSubmit = e => {
+   handleSubmit = async  e => {
     e.preventDefault();
     try {
-      firebase
+      await firebase
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.pw)
         .catch(function(error) {
@@ -38,11 +38,15 @@ class LoginPage extends Component {
           // ...
         });
       this.props.handleLogin();
-      this.props.history.push('/admin');
+      this.newMethod();
     } catch (err) {
       console.log(err);
     }
   };
+  newMethod() {
+    this.props.history.push('/admin');
+  }
+
   render() {
     return (
       <React.Fragment>
