@@ -103,6 +103,7 @@ const AdminComponent = props => {
                       ? item.photoRefs.map((e, i) => {
                           return (
                             <img
+                            key={i}
                               alt='job photos'
                               style={{
                                 ObjectFit: 'scale-down',
