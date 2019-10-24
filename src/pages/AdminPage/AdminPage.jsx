@@ -28,7 +28,7 @@ class AdminPage extends Component {
   };
   componentDidMount = async () => {
     this.setState({
-      user: await firebase.auth().currentUser
+      user: firebase.auth().currentUser
     });
     const self = this;
     const db = firebase.firestore();
@@ -36,16 +36,15 @@ class AdminPage extends Component {
       .collection('job-completion-report')
       .orderBy('date', 'desc');
     reports.get().then(function(querySnapshot) {
-      querySnapshot.forEach(async function(doc) {
+      querySnapshot.forEach(function(doc) {
         reportList.push(doc.data());
-       await self.setState({
+        self.setState({
           reports: reportList
         });
       });
     });
   };
   render() {
-    // if (!this.props.user) return <Redirect to='/' />;
     return (
       <Container>
         <h1 style={{ textAlign: 'center', marginBottom: 25, marginTop: 25 }}>
