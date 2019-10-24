@@ -24,20 +24,20 @@ class LoginPage extends Component {
       [e.target.name]: e.target.value
     });
   };
-  handleSubmit = async e => {
+  handleSubmit = e => {
     e.preventDefault();
     try {
-      await firebase
+      firebase
         .auth()
         .signInWithEmailAndPassword(this.state.email, this.state.pw)
         .catch(function(error) {
           // Handle Errors here.
           var errorCode = error.code;
           var errorMessage = error.message;
-          console.log(errorCode, errorMessage)
+          console.log(errorCode, errorMessage);
           // ...
         });
-      await this.props.handleLogin();
+      this.props.handleLogin();
       this.props.history.push('/admin');
     } catch (err) {
       console.log(err);

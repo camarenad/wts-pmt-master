@@ -4,7 +4,6 @@ import NavBar from '../../components/NavBar/NavBar';
 import LoginPage from '../LoginPage/LoginPage';
 import AdminPage from '../AdminPage/AdminPage';
 import firebase from '../../firebase/firebase';
-import Test from'../Test'
 
 import 'firebase/auth';
 
@@ -15,14 +14,19 @@ class App extends Component {
     this.handleLogout = this.handleLogout.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
     this.state = {
-      user: firebase.auth().currentUser,
+      user: null,
       toggleMenu: false
     };
   }
-  componentDidMount = async () => {
-    await firebase.auth().onAuthStateChanged(user => {
+  componentDidMount = () => {
+    var self = this
+    firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        this.setState({ user });
+        // User is signed in.
+        self.setState({ user });
+      } else {
+        // No user is signed in.
+        alert('no user');
       }
     });
   };
@@ -51,8 +55,6 @@ class App extends Component {
       <BrowserRouter>
         <NavBar
           user={firebase.auth().currentUser}
-          handleToggle={this.handleToggle}
-          state={this.state.toggleMenu}
           handleLogout={this.handleLogout}
         />
         <Switch>
@@ -60,7 +62,7 @@ class App extends Component {
             exact
             path='/'
             render={({ history }) =>
-              !this.state.user ? (
+              !firebase.auth().currentUser ? (
                 <LoginPage history={history} handleLogin={this.handleLogin} />
               ) : (
                 <Redirect to='/admin' />
@@ -78,7 +80,9 @@ class App extends Component {
               )
             }
           />
-        
+          <Route path='*'>
+            <Redirect to='/'></Redirect>
+          </Route>
         </Switch>
       </BrowserRouter>
     );

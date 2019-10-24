@@ -4,16 +4,20 @@ import Container from '@material-ui/core/Container';
 import AdminComponent from '../../components/AdminComponent/AdminComponent';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import firebase from '../../firebase/firebase';
-import 'firebase/auth' 
-
+import 'firebase/auth';
 const reportList = [];
 
 class AdminPage extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
-    this.state = { id: '', address: '', reports: null };
+    this.state = {
+      id: '',
+      address: '',
+      reports: null,
+      user: firebase.auth().currentUser
+    };
   }
   handleSubmit = e => {
     console.log('sweet');
@@ -22,10 +26,15 @@ class AdminPage extends Component {
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  componentDidMount = async () => {
+  componentDidMount = () => {
+    this.setState({
+      user: firebase.auth().currentUser
+    });
     const self = this;
     const db = firebase.firestore();
-    const reports = db.collection('job-completion-report');
+    const reports = db
+      .collection('job-completion-report')
+      .orderBy('date', 'desc');
     reports.get().then(function(querySnapshot) {
       querySnapshot.forEach(function(doc) {
         reportList.push(doc.data());
@@ -36,6 +45,7 @@ class AdminPage extends Component {
     });
   };
   render() {
+    // if (!this.props.user) return <Redirect to='/' />;
     return (
       <Container>
         <h1 style={{ textAlign: 'center', marginBottom: 25, marginTop: 25 }}>
@@ -65,8 +75,11 @@ class AdminPage extends Component {
               </Button>
             </div>
           </form>
-          <Grid item xs={12} style={{marginTop:50}}>
-          <AdminComponent reports={this.state.reports} />
+          <Grid item xs={12} style={{ marginTop: 50 }}>
+            <AdminComponent
+              user={firebase.auth().currentUser}
+              reports={this.state.reports}
+            />
           </Grid>
         </Grid>
       </Container>
