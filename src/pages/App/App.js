@@ -18,18 +18,14 @@ class App extends Component {
       toggleMenu: false
     };
   }
-  componentDidMount = () => {
-    var self = this
-    firebase.auth().onAuthStateChanged(function(user) {
+  async componentDidMount() {
+    await firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
-        self.setState({ user });
-      } else {
-        // No user is signed in.
-        alert('no user');
+        this.setState({ user });
       }
     });
-  };
+  }
   handleToggle = () => this.setState({ toggleMenu: !this.state.toggleMenu });
   handleLogin = async () => {
     var user = await firebase.auth().currentUser;
@@ -60,23 +56,23 @@ class App extends Component {
         <Switch>
           <Route
             exact
-            path='/'
-            render={({ history }) =>
-              !firebase.auth().currentUser ? (
-                <LoginPage history={history} handleLogin={this.handleLogin} />
-              ) : (
-                <Redirect to='/admin' />
-              )
-            }
-          />
-          <Route
-            exact
             path='/admin'
             render={props =>
               firebase.auth().currentUser ? (
                 <AdminPage {...props} />
               ) : (
                 <Redirect to='/' />
+              )
+            }
+          />
+          <Route
+            exact
+            path='/'
+            render={({ history }) =>
+              !firebase.auth().currentUser ? (
+                <LoginPage history={history} handleLogin={this.handleLogin} />
+              ) : (
+                <Redirect to='/admin' />
               )
             }
           />

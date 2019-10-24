@@ -26,9 +26,9 @@ class AdminPage extends Component {
   handleChange = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  componentDidMount = () => {
+  componentDidMount = async () => {
     this.setState({
-      user: firebase.auth().currentUser
+      user: await firebase.auth().currentUser
     });
     const self = this;
     const db = firebase.firestore();
@@ -36,9 +36,9 @@ class AdminPage extends Component {
       .collection('job-completion-report')
       .orderBy('date', 'desc');
     reports.get().then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
+      querySnapshot.forEach(async function(doc) {
         reportList.push(doc.data());
-        self.setState({
+       await self.setState({
           reports: reportList
         });
       });

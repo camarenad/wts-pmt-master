@@ -35,6 +35,9 @@ const AdminComponent = props => {
                       ID: {item.jobId}
                     </Typography>
                     <Typography gutterBottom variant='subtitle2' component='h4'>
+                      Date: {item.date}
+                    </Typography>
+                    <Typography gutterBottom variant='subtitle2' component='h4'>
                       Tech: {item.name}
                     </Typography>
                     <Typography gutterBottom variant='subtitle2' component='h4'>
