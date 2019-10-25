@@ -13,25 +13,26 @@ class App extends Component {
     this.handleLogin = this.handleLogin.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
     this.handleToggle = this.handleToggle.bind(this);
+    this.setUser = this.setUser.bind(this);
     this.state = {
-      user: firebase.auth().currentUser,
+      user: this.setUser(),
       toggleMenu: false
     };
   }
-  async componentDidMount()  {
-    var self = this
+  async setUser() {
+    var self = this;
     await firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
         self.setState({ user });
       }
     });
-  };
+  }
   handleToggle = () => this.setState({ toggleMenu: !this.state.toggleMenu });
   async handleLogin() {
     var user = await firebase.auth().currentUser;
     this.setState({ user: user });
-  };
+  }
   handleLogout = () => {
     firebase
       .auth()
@@ -66,6 +67,7 @@ class App extends Component {
               )
             }
           />
+
           <Route
             exact
             path='/'

@@ -5,13 +5,16 @@ import AdminComponent from '../../components/AdminComponent/AdminComponent';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import firebase from '../../firebase/firebase';
 import 'firebase/auth';
+
 const reportList = [];
+let updatedList = [];
 
 class AdminPage extends Component {
   constructor(props) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
+
     this.state = {
       id: '',
       address: '',
@@ -19,17 +22,59 @@ class AdminPage extends Component {
       user: firebase.auth().currentUser
     };
   }
-  handleSubmit = e => {
-    console.log('sweet');
+
+  handleSubmit(e) {
+    // Add Search by tech name query
+    // error handling
     e.preventDefault();
-  };
+    if (this.state.id) {
+      const self = this;
+      const db = firebase.firestore();
+      const reports = db
+        .collection('job-completion-report')
+        .where('jobId', '==', `${this.state.id.toString()}`)
+        .orderBy('date', 'desc');
+      reports.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          updatedList.push(doc.data());
+          self.setState(
+            {
+              reports: updatedList
+            },
+            () => {
+              updatedList = [];
+            }
+          );
+        });
+      });
+    } else if (this.state.address) {
+      const self = this;
+      const db = firebase.firestore();
+      const reports = db
+        .collection('job-completion-report')
+        .where('jobLocation', '==', `${this.state.address.toString()}`)
+        .orderBy('date', 'desc');
+      reports.get().then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          updatedList.push(doc.data());
+          self.setState(
+            {
+              reports: updatedList
+            },
+            () => {
+              updatedList = [];
+            }
+          );
+        });
+      });
+    }
+  }
+
   handleChange = e => {
+    e.preventDefault();
     this.setState({ [e.target.name]: e.target.value });
   };
   componentDidMount = async () => {
-    this.setState({
-      user: firebase.auth().currentUser
-    });
     const self = this;
     const db = firebase.firestore();
     const reports = db
@@ -44,6 +89,9 @@ class AdminPage extends Component {
       });
     });
   };
+  componentDidUpdate(nextProps, nextState) {
+    return this.state.reports !== nextState.reports;
+  }
   render() {
     return (
       <Container>
