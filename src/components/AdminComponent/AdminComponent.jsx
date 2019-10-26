@@ -1,7 +1,6 @@
 import React from 'react';
 import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
-import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
 // import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
@@ -11,11 +10,11 @@ const AdminComponent = props => {
     <div>
       {props.reports
         ? props.reports.map(function(item, index) {
-            let photo = item.photoRefs ? item.photoRefs[0].toString() : '';
+            // let photo = item.photoRefs ? item.photoRefs[0].toString() : '';
             return (
               <Card key={index} style={{ margin: '40px 0 25px 0' }}>
                 <CardActionArea>
-                  {item.photoRefs ? (
+                  {/* {item.photoRefs ? (
                     <CardMedia
                       component='img'
                       alt='Work Image'
@@ -26,7 +25,7 @@ const AdminComponent = props => {
                     />
                   ) : (
                     ''
-                  )}
+                  )} */}
                   <CardContent>
                     <Typography gutterBottom variant='h5' component='h2'>
                       Bid Zone: {item.bidZone}
@@ -103,7 +102,7 @@ const AdminComponent = props => {
                       ? item.photoRefs.map((e, i) => {
                           return (
                             <img
-                            key={i}
+                              key={i}
                               alt='job photos'
                               style={{
                                 ObjectFit: 'scale-down',

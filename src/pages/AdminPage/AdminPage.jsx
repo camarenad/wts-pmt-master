@@ -5,6 +5,7 @@ import AdminComponent from '../../components/AdminComponent/AdminComponent';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import firebase from '../../firebase/firebase';
 import 'firebase/auth';
+import DropdownComponent from '../../components/DropdownComponent/DropdownComponent';
 
 const reportList = [];
 let updatedList = [];
@@ -19,6 +20,7 @@ class AdminPage extends Component {
       id: '',
       address: '',
       reports: null,
+      bidArea: '',
       user: firebase.auth().currentUser
     };
   }
@@ -123,13 +125,49 @@ class AdminPage extends Component {
             }
           );
         });
-    } else if (!this.state.id && !this.state.address && !this.state.tech) {
+    } else if (this.state.bidArea) {
+      const self = this;
+      const db = firebase.firestore();
+      const reports = db
+        .collection('job-completion-report')
+        .where('bidZone', '==', `${this.state.bidArea.toString()}`)
+        .orderBy('date', 'desc');
+      reports
+        .get()
+        .then(function(querySnapshot) {
+          if (querySnapshot.empty) {
+            alert('Resource does not exist');
+            window.location = '/admin';
+          } else {
+            querySnapshot.forEach(function(doc) {
+              updatedList.push(doc.data());
+            });
+          }
+        })
+        .catch(function(e) {
+          console.log(e);
+        })
+        .finally(function() {
+          self.setState(
+            {
+              reports: updatedList
+            },
+            () => {
+              updatedList = [];
+            }
+          );
+        });
+    } else if (
+      !this.state.id &&
+      !this.state.address &&
+      !this.state.tech &&
+      !this.state.bidArea
+    ) {
       alert('Please enter a search parameter');
     } else {
       window.location = '/';
     }
   }
-
   handleChange = e => {
     e.preventDefault();
     this.setState({ [e.target.name]: e.target.value });
@@ -165,6 +203,10 @@ class AdminPage extends Component {
         </h1>
         <Divider style={{ marginBottom: 20 }} />
         <Grid item xs={12}>
+          <DropdownComponent
+            handleChange={this.handleChange}
+            bidArea={this.state.bidArea}
+          />
           <FilterComponent
             label='ID'
             handleChange={this.handleChange}
