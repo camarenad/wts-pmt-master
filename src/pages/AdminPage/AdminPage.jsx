@@ -37,9 +37,14 @@ class AdminPage extends Component {
       reports
         .get()
         .then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
-            updatedList.push(doc.data());
-          });
+          if (querySnapshot.empty) {
+            alert('ID does not exist');
+            window.location = '/';
+          } else {
+            querySnapshot.forEach(function(doc) {
+              updatedList.push(doc.data());
+            });
+          }
         })
         .catch(function(e) {
           console.log(e);
@@ -64,9 +69,14 @@ class AdminPage extends Component {
       reports
         .get()
         .then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
-            updatedList.push(doc.data());
-          });
+          if (querySnapshot.empty) {
+            alert('Address does not exist');
+            window.location = '/admin';
+          } else {
+            querySnapshot.forEach(function(doc) {
+              updatedList.push(doc.data());
+            });
+          }
         })
         .catch(function(e) {
           console.log(e);
@@ -91,9 +101,14 @@ class AdminPage extends Component {
       reports
         .get()
         .then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
-            updatedList.push(doc.data());
-          });
+          if (querySnapshot.empty) {
+            alert('Tech does not exist');
+            window.location = '/admin';
+          } else {
+            querySnapshot.forEach(function(doc) {
+              updatedList.push(doc.data());
+            });
+          }
         })
         .catch(function(e) {
           console.log(e);
@@ -108,7 +123,7 @@ class AdminPage extends Component {
             }
           );
         });
-    } else if (!this.state.id && !this.state.address) {
+    } else if (!this.state.id && !this.state.address && !this.state.tech) {
       alert('Please enter a search parameter');
     } else {
       window.location = '/';
@@ -125,14 +140,19 @@ class AdminPage extends Component {
     const reports = db
       .collection('job-completion-report')
       .orderBy('date', 'desc');
-    reports.get().then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        reportList.push(doc.data());
-        self.setState({
-          reports: reportList
+    reports
+      .get()
+      .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+          reportList.push(doc.data());
+          self.setState({
+            reports: reportList
+          });
         });
+      })
+      .catch(err => {
+        console.log(err);
       });
-    });
   };
   componentDidUpdate(nextProps, nextState) {
     return this.state.reports !== nextState.reports;
