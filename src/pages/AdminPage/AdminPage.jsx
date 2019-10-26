@@ -81,6 +81,37 @@ class AdminPage extends Component {
             }
           );
         });
+    } else if (this.state.tech) {
+      const self = this;
+      const db = firebase.firestore();
+      const reports = db
+        .collection('job-completion-report')
+        .where('name', '==', `${this.state.tech.toString()}`)
+        .orderBy('date', 'desc');
+      reports
+        .get()
+        .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            updatedList.push(doc.data());
+          });
+        })
+        .catch(function(e) {
+          console.log(e);
+        })
+        .finally(function() {
+          self.setState(
+            {
+              reports: updatedList
+            },
+            () => {
+              updatedList = [];
+            }
+          );
+        });
+    } else if (!this.state.id && !this.state.address) {
+      alert('Please enter a search parameter');
+    } else {
+      window.location = '/';
     }
   }
 
@@ -123,6 +154,11 @@ class AdminPage extends Component {
             label='Address'
             handleChange={this.handleChange}
             name='address'
+          />
+          <FilterComponent
+            label='Tech'
+            handleChange={this.handleChange}
+            name='tech'
           />
           <form onSubmit={this.handleSubmit}>
             <div style={{ textAlign: 'center' }}>
