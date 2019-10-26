@@ -33,6 +33,7 @@ class App extends Component {
     var user = await firebase.auth().currentUser;
     this.setState({ user: user });
   }
+
   handleLogout = () => {
     firebase
       .auth()
