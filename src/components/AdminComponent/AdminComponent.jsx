@@ -63,13 +63,13 @@ const AdminComponent = props => {
                         variant='subtitle2'
                         component='h4'
                       >
-                        Emergency: {item.emergency.toString()}
+                        Emergency: Yes
                       </Typography>
                     ) : (
                       ''
                     )}
                     <Typography gutterBottom variant='subtitle2' component='h4'>
-                      USA Removal: {item.usaRemoval.toString()}
+                      USA Removal: Yes
                     </Typography>
                     {item.jobComplete ? (
                       <Typography
@@ -77,7 +77,7 @@ const AdminComponent = props => {
                         variant='subtitle2'
                         component='h4'
                       >
-                        Job Complete: {item.jobComplete.toString()}
+                        Job Complete: Yes
                       </Typography>
                     ) : (
                       ''
