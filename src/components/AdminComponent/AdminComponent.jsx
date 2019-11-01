@@ -101,16 +101,22 @@ const AdminComponent = props => {
                     {item.photoRefs
                       ? item.photoRefs.map((e, i) => {
                           return (
-                            <img
-                              key={i}
-                              alt='job photos'
-                              style={{
-                                ObjectFit: 'scale-down',
-                                height: 200,
-                                width: 180
-                              }}
-                              src={e}
-                            />
+                            <a
+                              href={e}
+                              target='_blank'
+                              rel='noopener noreferrer'
+                            >
+                              <img
+                                key={i}
+                                alt='job photos'
+                                style={{
+                                  ObjectFit: 'scale-down',
+                                  height: 200,
+                                  width: 180
+                                }}
+                                src={e}
+                              />
+                            </a>
                           );
                         })
                       : ''}
