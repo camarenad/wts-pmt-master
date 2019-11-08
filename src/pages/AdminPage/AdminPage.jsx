@@ -99,7 +99,7 @@ class AdminPage extends Component {
       const reports = db
         .collection('job-completion-report')
         .where('name', '==', `${this.state.tech.toString()}`)
-        .orderBy('date', 'desc');
+        .orderBy('date', 'desc')
       reports
         .get()
         .then(function(querySnapshot) {
@@ -177,7 +177,8 @@ class AdminPage extends Component {
     const db = firebase.firestore();
     const reports = db
       .collection('job-completion-report')
-      .orderBy('date', 'desc');
+      .orderBy('date', 'desc')
+      .limit(5);
     reports
       .get()
       .then(function(querySnapshot) {
