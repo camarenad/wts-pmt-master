@@ -4,8 +4,27 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import Typography from '@material-ui/core/Typography';
 // import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
+import { Divider } from '@material-ui/core';
 
 const AdminComponent = props => {
+  const spacerStyles = {
+    margin: '10px 0'
+  };
+  function tConvert(time) {
+    // Check correct time format and split into components
+    time = time
+      .toString()
+      .match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+    if (time.length > 1) {
+      // If time format correct
+      time = time.slice(1); // Remove full string match value
+      time[5] = +time[0] < 12 ? ' AM' : ' PM'; // Set AM/PM
+      time[0] = +time[0] % 12 || 12; // Adjust hours
+    }
+    return time.join(''); // return adjusted time or original string
+  }
+
   const page = (
     <div>
       {props.reports
@@ -26,70 +45,128 @@ const AdminComponent = props => {
                   ) : (
                     ''
                   )} */}
+
                   <CardContent>
-                    <Typography gutterBottom variant='h5' component='h2'>
-                      Bid Zone: {item.bidZone}
+                    <Typography
+                      gutterBottom
+                      variant='h5'
+                      component='h1'
+                      style={{ textAlign: 'center' }}
+                    >
+                      Zone: {item.bidZone}
                     </Typography>
-                    <Typography gutterBottom variant='subtitle2' component='h4'>
+                    <Divider style={spacerStyles} />
+                    <Typography gutterBottom variant='subtitle2' component='h1'>
                       ID: {item.jobId}
                     </Typography>
+                    <Divider style={spacerStyles} />
                     <Typography gutterBottom variant='subtitle2' component='h4'>
                       Date: {item.date}
                     </Typography>
+                    <Divider style={spacerStyles} />
                     <Typography gutterBottom variant='subtitle2' component='h4'>
                       Tech: {item.name}
                     </Typography>
+                    <Divider style={spacerStyles} />
                     <Typography gutterBottom variant='subtitle2' component='h4'>
                       Location: {item.jobLocation}
                     </Typography>
+                    <Divider style={spacerStyles} />
                     <Typography gutterBottom variant='subtitle2' component='h4'>
-                      Time In: {item.inTime}
+                      Time in: {tConvert(item.inTime)}
                     </Typography>
+                    <Divider style={spacerStyles} />
                     <Typography gutterBottom variant='subtitle2' component='h4'>
-                      Time Out: {item.outTime}
+                      Time out: {tConvert(item.outTime)}
                     </Typography>
-                    <Typography gutterBottom variant='subtitle2' component='h4'>
-                      Pending: {item.pending}
-                    </Typography>
-                    <Typography gutterBottom variant='subtitle2' component='h4'>
-                      Material Costs: {item.materialCosts}
-                    </Typography>
-                    <Typography gutterBottom variant='subtitle2' component='h4'>
-                      Delay: {item.delay}
-                    </Typography>
+                    {item.pending ? (
+                      <div>
+                        <Divider style={spacerStyles} />
+                        <Typography
+                          gutterBottom
+                          variant='subtitle2'
+                          component='h4'
+                        >
+                          <span style={{ color: 'green' }}> Pending:</span>{' '}
+                          {item.pending}
+                        </Typography>
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    <Divider style={spacerStyles} />
+                    {item.materialCosts ? (
+                      <div>
+                        <Typography
+                          gutterBottom
+                          variant='subtitle2'
+                          component='h4'
+                        >
+                          Material Costs: {item.materialCosts}
+                        </Typography>
+                        <Divider style={spacerStyles} />
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {item.delay ? (
+                      <div>
+                        <Typography
+                          gutterBottom
+                          variant='subtitle2'
+                          component='h4'
+                        >
+                          <span style={{ color: 'red' }}> Delay:</span>{' '}
+                          {item.delay}
+                        </Typography>
+                        <Divider style={spacerStyles} />
+                      </div>
+                    ) : (
+                      ''
+                    )}
                     {item.emergency ? (
-                      <Typography
-                        gutterBottom
-                        variant='subtitle2'
-                        component='h4'
-                      >
-                        Emergency: Yes
-                      </Typography>
+                      <div>
+                        <Typography
+                          gutterBottom
+                          variant='subtitle2'
+                          component='h4'
+                        >
+                          <span style={{color:'red'}}> Emergency:</span> Yes
+                        </Typography>
+                        <Divider style={spacerStyles} />
+                      </div>
                     ) : (
                       ''
                     )}
                     <Typography gutterBottom variant='subtitle2' component='h4'>
                       USA Removal: Yes
                     </Typography>
+                    <Divider style={spacerStyles} />
                     {item.jobComplete ? (
-                      <Typography
-                        gutterBottom
-                        variant='subtitle2'
-                        component='h4'
-                      >
-                        Job Complete: Yes
-                      </Typography>
+                      <div>
+                        <Typography
+                          gutterBottom
+                          variant='subtitle2'
+                          component='h4'
+                        >
+                          Job Complete: Yes
+                        </Typography>
+                        <Divider style={spacerStyles} />
+                      </div>
                     ) : (
                       ''
                     )}
                     {item.tripCharge ? (
-                      <Typography
-                        gutterBottom
-                        variant='subtitle2'
-                        component='h4'
-                      >
-                        Trip Charge: {item.tripCharge.toString()}
-                      </Typography>
+                      <div>
+                        <Typography
+                          gutterBottom
+                          variant='subtitle2'
+                          component='h4'
+                        >
+                          Trip Charge: {item.tripCharge.toString()}
+                        </Typography>
+                        <Divider style={spacerStyles} />
+                      </div>
                     ) : (
                       ''
                     )}
@@ -98,6 +175,7 @@ const AdminComponent = props => {
                       {item.jobSummary}
                       <br /> <br />
                     </Typography>
+                    {item.photoRefs ? <Divider style={spacerStyles} /> : ''}
                     {item.photoRefs
                       ? item.photoRefs.map((e, i) => {
                           return (
