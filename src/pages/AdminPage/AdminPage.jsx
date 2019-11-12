@@ -39,10 +39,11 @@ class AdminPage extends Component {
       .startAfter(next);
     nextSeven.get().then(querySnapshot => {
       querySnapshot.forEach(function(doc) {
-        updatedList.push(doc.data());
+        reportList.push(doc.data());
+        
         self.setState({
           pagination: doc,
-          reports:[...updatedList]
+          reports:[...reportList]
         })
       });
     });
