@@ -204,6 +204,7 @@ const AdminComponent = props => {
               </Card>
             );
           })
+
         : 'No Work Orders'}
     </div>
   );
