@@ -9,29 +9,50 @@ import DropdownComponent from '../../components/DropdownComponent/DropdownCompon
 
 const reportList = [];
 let updatedList = [];
+const db = firebase.firestore();
 
 class AdminPage extends Component {
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePagination = this.handlePagination.bind(this);
 
     this.state = {
       id: '',
+      pagination: '',
       address: '',
       reports: null,
       bidArea: '',
       user: firebase.auth().currentUser
     };
   }
-
+  handlePagination(e) {
+    e.preventDefault();
+    console.log('run');
+    const self = this
+    var next = this.state.pagination;
+    var nextSeven = db
+      .collection('job-completion-report')
+      .orderBy('date', 'desc')
+      .limit(5)
+      .startAfter(next);
+    nextSeven.get().then(querySnapshot => {
+      querySnapshot.forEach(function(doc) {
+        updatedList.push(doc.data());
+        self.setState({
+          pagination: doc,
+          reports:[...updatedList]
+        })
+      });
+    });
+  }
   handleSubmit(e) {
     // Add Search by tech name query
     // error handling
     e.preventDefault();
     if (this.state.id) {
       const self = this;
-      const db = firebase.firestore();
       const reports = db
         .collection('job-completion-report')
         .where('jobId', '==', `${this.state.id.toString()}`)
@@ -63,7 +84,6 @@ class AdminPage extends Component {
         });
     } else if (this.state.address) {
       const self = this;
-      const db = firebase.firestore();
       const reports = db
         .collection('job-completion-report')
         .where('jobLocation', '==', `${this.state.address.toString()}`)
@@ -95,11 +115,10 @@ class AdminPage extends Component {
         });
     } else if (this.state.tech) {
       const self = this;
-      const db = firebase.firestore();
       const reports = db
         .collection('job-completion-report')
         .where('name', '==', `${this.state.tech.toString()}`)
-        .orderBy('date', 'desc')
+        .orderBy('date', 'desc');
       reports
         .get()
         .then(function(querySnapshot) {
@@ -127,7 +146,6 @@ class AdminPage extends Component {
         });
     } else if (this.state.bidArea) {
       const self = this;
-      const db = firebase.firestore();
       const reports = db
         .collection('job-completion-report')
         .where('bidZone', '==', `${this.state.bidArea.toString()}`)
@@ -174,18 +192,20 @@ class AdminPage extends Component {
   };
   componentDidMount = async () => {
     const self = this;
-    const db = firebase.firestore();
     const reports = db
       .collection('job-completion-report')
       .orderBy('date', 'desc')
       .limit(5);
     reports
       .get()
-      .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
+      .then(async function(querySnapshot) {
+        console.log(querySnapshot);
+
+        await querySnapshot.forEach(function(doc) {
           reportList.push(doc.data());
           self.setState({
-            reports: reportList
+            reports: reportList,
+            pagination: doc
           });
         });
       })
@@ -241,6 +261,17 @@ class AdminPage extends Component {
               reports={this.state.reports}
             />
           </Grid>
+          <div style={{ display: 'flex', justifyContent: 'center' }}>
+            <Button
+              onClick={this.handlePagination}
+              variant='contained'
+              margin='normal'
+              color='primary'
+              type='submit'
+            >
+              Next 7
+            </Button>
+          </div>
         </Grid>
       </Container>
     );
