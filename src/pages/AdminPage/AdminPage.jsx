@@ -57,7 +57,8 @@ class AdminPage extends Component {
       const reports = db
         .collection('job-completion-report')
         .where('jobId', '==', `${this.state.id.toString()}`)
-        .orderBy('date', 'desc');
+        .orderBy('date', 'desc')
+        .limit(5)
       reports
         .get()
         .then(function(querySnapshot) {
@@ -88,7 +89,8 @@ class AdminPage extends Component {
       const reports = db
         .collection('job-completion-report')
         .where('jobLocation', '==', `${this.state.address.toString()}`)
-        .orderBy('date', 'desc');
+        .orderBy('date', 'desc')
+        .limit(5);
       reports
         .get()
         .then(function(querySnapshot) {
@@ -119,7 +121,8 @@ class AdminPage extends Component {
       const reports = db
         .collection('job-completion-report')
         .where('name', '==', `${this.state.tech.toString()}`)
-        .orderBy('date', 'desc');
+        .orderBy('date', 'desc')
+        .limit(5);
       reports
         .get()
         .then(function(querySnapshot) {
@@ -150,7 +153,8 @@ class AdminPage extends Component {
       const reports = db
         .collection('job-completion-report')
         .where('bidZone', '==', `${this.state.bidArea.toString()}`)
-        .orderBy('date', 'desc');
+        .orderBy('date', 'desc')
+        .limit(5)
       reports
         .get()
         .then(function(querySnapshot) {
