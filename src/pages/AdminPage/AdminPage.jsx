@@ -30,23 +30,27 @@ class AdminPage extends Component {
   handlePagination(e) {
     e.preventDefault();
     console.log('run');
-    const self = this
-    var next = this.state.pagination;
-    var nextSeven = db
-      .collection('job-completion-report')
-      .orderBy('date', 'desc')
-      .limit(5)
-      .startAfter(next);
-    nextSeven.get().then(querySnapshot => {
-      querySnapshot.forEach(function(doc) {
-        reportList.push(doc.data());
-        
-        self.setState({
-          pagination: doc,
-          reports:[...reportList]
-        })
+    const self = this;
+    if (this.state.bidArea) {
+      alert('yep');
+    } else {
+      var next = this.state.pagination;
+      var nextSeven = db
+        .collection('job-completion-report')
+        .orderBy('date', 'desc')
+        .limit(5)
+        .startAfter(next);
+      nextSeven.get().then(querySnapshot => {
+        querySnapshot.forEach(function(doc) {
+          reportList.push(doc.data());
+
+          self.setState({
+            pagination: doc,
+            reports: [...reportList]
+          });
+        });
       });
-    });
+    }
   }
   handleSubmit(e) {
     // Add Search by tech name query
@@ -58,7 +62,7 @@ class AdminPage extends Component {
         .collection('job-completion-report')
         .where('jobId', '==', `${this.state.id.toString()}`)
         .orderBy('date', 'desc')
-        .limit(5)
+        .limit(5);
       reports
         .get()
         .then(function(querySnapshot) {
@@ -154,7 +158,7 @@ class AdminPage extends Component {
         .collection('job-completion-report')
         .where('bidZone', '==', `${this.state.bidArea.toString()}`)
         .orderBy('date', 'desc')
-        .limit(5)
+        .limit(5);
       reports
         .get()
         .then(function(querySnapshot) {
