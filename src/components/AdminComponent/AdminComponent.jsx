@@ -15,7 +15,6 @@ const AdminComponent = props => {
     time = time
       .toString()
       .match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
-
     if (time.length > 1) {
       // If time format correct
       time = time.slice(1); // Remove full string match value
@@ -131,7 +130,7 @@ const AdminComponent = props => {
                           variant='subtitle2'
                           component='h4'
                         >
-                          <span style={{color:'red'}}> Emergency:</span> Yes
+                          <span style={{ color: 'red' }}> Emergency:</span> Yes
                         </Typography>
                         <Divider style={spacerStyles} />
                       </div>
@@ -204,7 +203,6 @@ const AdminComponent = props => {
               </Card>
             );
           })
-
         : 'No Work Orders'}
     </div>
   );
