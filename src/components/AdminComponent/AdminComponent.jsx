@@ -35,8 +35,9 @@ const AdminComponent = props => {
       {props.reports
         ? props.reports.map(function(item, index) {
             // let photo = item.photoRefs ? item.photoRefs[0].toString() : '';
-            const tmpArr =   item.combinedArticles ? Object.keys(item.combinedArticles)
-            : []
+            const tmpArr = item.combinedArticles
+              ? Object.keys(item.combinedArticles)
+              : [];
             // console.log(
             //   tmpArr.map(vals => {
             //     return item.combinedArticles[vals].label;
@@ -175,45 +176,79 @@ const AdminComponent = props => {
                           variant='subtitle2'
                           component='h4'
                         >
-                          Trip Charge: {item.tripCharge.toString()}
+                          Trip Charge: 'Yes'
                         </Typography>
                         <Divider style={spacerStyles} />
                       </div>
                     ) : (
                       ''
                     )}
-                    <Paper style={{ margin: '20px 0' }}>
-                      <Table>
-                        <TableHead>
-                          <TableRow>
-                            <TableCell>Id</TableCell>
-                            <TableCell>Label</TableCell>
-                            <TableCell>Qty</TableCell>
-                            <TableCell>UOM</TableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {tmpArr.map((key, idx) => {
-                            return (
-                              <TableRow key={idx}>
-                                <TableCell component='th' scope='row'>
-                                  {key}
-                                </TableCell>
-                                <TableCell component='th' scope='row'>
-                                  {item.combinedArticles[key].label}
-                                </TableCell>
-                                <TableCell component='th' scope='row'>
-                                  {item.combinedArticles[key].qty}
-                                </TableCell>
-                                <TableCell component='th' scope='row'>
-                                  {item.combinedArticles[key].uom}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })}
-                        </TableBody>
-                      </Table>
-                    </Paper>
+                    {item.standByTime ? (
+                      <div style={{margin:'5px 0'}}>
+                        <Typography
+                          gutterBottom
+                          variant='subtitle2'
+                          component='h4'
+                        >
+                          Stand-by in: {tConvert(item.standbyStart)}
+                        </Typography>
+                        <Divider style={spacerStyles} />
+                        <Typography
+                          gutterBottom
+                          variant='subtitle2'
+                          component='h4'
+                        >
+                          Stand-by out: {tConvert(item.standbyEnd)}
+                        </Typography>
+                        <Divider style={spacerStyles} />
+                        <Typography
+                          gutterBottom
+                          variant='subtitle2'
+                          component='h4'
+                        >
+                          Reason: {item.standbyReason}
+                        </Typography>
+                        <Divider style={spacerStyles} />
+                      </div>
+                    ) : (
+                      ''
+                    )}
+                    {tmpArr.length !== 0  ? (
+                      <Paper style={{ margin: '20px 0' }}>
+                        <Table>
+                          <TableHead>
+                            <TableRow>
+                              <TableCell>Id</TableCell>
+                              <TableCell>Label</TableCell>
+                              <TableCell>Qty</TableCell>
+                              <TableCell>UOM</TableCell>
+                            </TableRow>
+                          </TableHead>
+                          <TableBody>
+                            {tmpArr.map((key, idx) => {
+                              return (
+                                <TableRow key={idx}>
+                                  <TableCell component='th' scope='row'>
+                                    {key}
+                                  </TableCell>
+                                  <TableCell component='th' scope='row'>
+                                    {item.combinedArticles[key].label}
+                                  </TableCell>
+                                  <TableCell component='th' scope='row'>
+                                    {item.combinedArticles[key].qty}
+                                  </TableCell>
+                                  <TableCell component='th' scope='row'>
+                                    {item.combinedArticles[key].uom}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
+                          </TableBody>
+                        </Table>
+                      </Paper>
+                    ) : (
+                      ''
+                    )}
                     <Typography variant='subtitle2' component='h4'>
                       Remarks: <br></br>
                       {item.jobSummary}
