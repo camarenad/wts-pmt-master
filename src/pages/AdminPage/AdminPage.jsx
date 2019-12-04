@@ -211,6 +211,7 @@ class AdminPage extends Component {
         console.log(querySnapshot);
 
         await querySnapshot.forEach(function(doc) {
+          console.log(doc.data())
           reportList.push(doc.data());
           self.setState({
             reports: reportList,
@@ -242,16 +243,16 @@ class AdminPage extends Component {
             handleChange={this.handleChange}
             name='id'
           />
-          <FilterComponent
+          {/* <FilterComponent
             label='Address'
             handleChange={this.handleChange}
             name='address'
-          />
-          <FilterComponent
+          /> */}
+          {/* <FilterComponent
             label='Tech'
             handleChange={this.handleChange}
             name='tech'
-          />
+          /> */}
           <form onSubmit={this.handleSubmit}>
             <div style={{ textAlign: 'center' }}>
               <Button
