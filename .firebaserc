@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "wts-pmt-master"
+    "default": "wts-pmt-master",
+    "admin-page": "job-completion-form"
   }
 }
