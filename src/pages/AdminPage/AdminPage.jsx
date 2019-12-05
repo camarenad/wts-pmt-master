@@ -39,7 +39,7 @@ class AdminPage extends Component {
       .collection('job-completion-report')
       .orderBy('date', 'desc')
       .where('bidZone', '==', `${this.state.bidArea.toString()}`)
-      .limit(5)
+      .limit(7)
       .startAfter(next);
     nextSeven.get().then(querySnapshot => {
       querySnapshot.forEach(function(doc) {
@@ -61,7 +61,7 @@ class AdminPage extends Component {
         .collection('job-completion-report')
         .where('bidZone', '==', `${this.state.bidArea.toString()}`)
         .orderBy('date', 'desc')
-        .limit(5);
+        .limit(7);
       reports
         .get()
         .then(function(querySnapshot) {
@@ -88,7 +88,7 @@ class AdminPage extends Component {
     if (this.state.bidArea && this.state.date) {
       // alert('run')
       updatedList = [];
-      let lastVisible = ''
+      let lastVisible = '';
       var reports = db.collection('job-completion-report');
       reports = reports.where(
         'bidZone',
@@ -98,7 +98,7 @@ class AdminPage extends Component {
       reports = reports
         .where('date', '==', `${this.state.date.toString()}`)
         .limit(5);
-        reports
+      reports
         .get()
         .then(function(querySnapshot) {
           if (querySnapshot.empty) {
@@ -134,7 +134,14 @@ class AdminPage extends Component {
   render() {
     return (
       <Container>
-        <h1 style={{ textAlign: 'center', marginBottom: 25, marginTop: 25 }}>
+        <h1
+          style={{
+            textAlign: 'center',
+            marginBottom: 25,
+            marginTop: 25,
+            padding: 20
+          }}
+        >
           Job Completion Reports
         </h1>
         <Divider style={{ marginBottom: 20 }} />
@@ -144,7 +151,7 @@ class AdminPage extends Component {
             bidArea={this.state.bidArea}
           />
           <TextField
-            style={{ margin: '40px 0' }}
+            style={{ margin: '10px 0' }}
             id='date'
             label='Date'
             type='date'
@@ -155,7 +162,6 @@ class AdminPage extends Component {
               shrink: true
             }}
           />
-
           {/* <FilterComponent
             label='ID'
             handleChange={this.handleChange}
