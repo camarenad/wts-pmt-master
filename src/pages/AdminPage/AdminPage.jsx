@@ -6,7 +6,7 @@ import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import firebase from '../../firebase/firebase';
 import 'firebase/auth';
 import DropdownComponent from '../../components/DropdownComponent/DropdownComponent';
-import getDate from '../../utils/getDate'
+import getDate from '../../utils/getDate';
 
 const reportList = [];
 let updatedList = [];
@@ -54,8 +54,7 @@ class AdminPage extends Component {
   async handleSubmit(e) {
     const self = this;
     e.preventDefault();
-    if (this.state.bidArea) {
-     
+    if (this.state.bidArea && !this.state.date) {
       let lastVisible = '';
       updatedList = [];
       const reports = db
@@ -85,24 +84,42 @@ class AdminPage extends Component {
             pagination: lastVisible
           });
         });
-    } else if(this.state.date) {
-      var reports = db
-      .collection('job-completion-report')
-      // .orderBy('date', 'desc')
-      .where('date', '==', `${this.state.date.toString()}`)
-      .limit(5)
-      reports
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          updatedList.push(doc.data())
-          self.setState({
-            pagination: doc,
-            reports: [...updatedList]
-          });
+    }
+    if (this.state.bidArea && this.state.date) {
+      // alert('run')
+      updatedList = [];
+      let lastVisible = ''
+      var reports = db.collection('job-completion-report');
+      reports = reports.where(
+        'bidZone',
+        '==',
+        `${this.state.bidArea.toString()}`
+      );
+      reports = reports
+        .where('date', '==', `${this.state.date.toString()}`)
+        .limit(5);
+        reports
+        .get()
+        .then(function(querySnapshot) {
+          if (querySnapshot.empty) {
+            alert('Resource does not exist');
+            window.location = '/admin';
+          } else {
+            querySnapshot.forEach(function(doc) {
+              updatedList.push(doc.data());
+            });
+            lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+          }
         })
-        
-      })
+        .catch(function(e) {
+          console.log(e);
+        })
+        .finally(function() {
+          self.setState({
+            reports: [...updatedList],
+            pagination: lastVisible
+          });
+        });
     }
   }
   handleChange = e => {
@@ -127,7 +144,7 @@ class AdminPage extends Component {
             bidArea={this.state.bidArea}
           />
           <TextField
-            style={{margin:'40px 0'}}
+            style={{ margin: '40px 0' }}
             id='date'
             label='Date'
             type='date'
