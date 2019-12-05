@@ -28,201 +28,65 @@ class AdminPage extends Component {
     };
   }
   handlePagination(e) {
+    let lastVisible = '';
     e.preventDefault();
     console.log('run');
     const self = this;
-    if (this.state.bidArea) {
-      alert('yep');
-    } else {
-      var next = this.state.pagination;
-      var nextSeven = db
-        .collection('job-completion-report')
-        .orderBy('date', 'desc')
-        .limit(5)
-        .startAfter(next);
-      nextSeven.get().then(querySnapshot => {
-        querySnapshot.forEach(function(doc) {
-          reportList.push(doc.data());
-
-          self.setState({
-            pagination: doc,
-            reports: [...reportList]
-          });
+    var next = this.state.pagination;
+    var nextSeven = db
+      .collection('job-completion-report')
+      .orderBy('date', 'desc')
+      .where('bidZone', '==', `${this.state.bidArea.toString()}`)
+      .limit(5)
+      .startAfter(next);
+    nextSeven.get().then(querySnapshot => {
+      querySnapshot.forEach(function(doc) {
+        updatedList.push(doc.data());
+        self.setState({
+          pagination: doc,
+          reports: [...updatedList]
         });
       });
-    }
+    });
   }
-  handleSubmit(e) {
-    // Add Search by tech name query
-    // error handling
+  async handleSubmit(e) {
     e.preventDefault();
-    if (this.state.id) {
-      const self = this;
-      const reports = db
-        .collection('job-completion-report')
-        .where('jobId', '==', `${this.state.id.toString()}`)
-        .orderBy('date', 'desc')
-        .limit(5);
-      reports
-        .get()
-        .then(function(querySnapshot) {
-          if (querySnapshot.empty) {
-            alert('ID does not exist');
-            window.location = '/';
-          } else {
-            querySnapshot.forEach(function(doc) {
-              updatedList.push(doc.data());
-            });
-          }
-        })
-        .catch(function(e) {
-          console.log(e);
-        })
-        .finally(function() {
-          self.setState(
-            {
-              reports: updatedList
-            },
-            () => {
-              updatedList = [];
-            }
-          );
+    const self = this;
+    let lastVisible = '';
+    updatedList = [];
+    const reports = db
+      .collection('job-completion-report')
+      .where('bidZone', '==', `${this.state.bidArea.toString()}`)
+      .orderBy('date', 'desc')
+      .limit(5);
+    reports
+      .get()
+      .then(function(querySnapshot) {
+        if (querySnapshot.empty) {
+          alert('Resource does not exist');
+          window.location = '/admin';
+        } else {
+          querySnapshot.forEach(function(doc) {
+            updatedList.push(doc.data());
+          });
+          lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+        }
+      })
+      .catch(function(e) {
+        console.log(e);
+      })
+      .finally(function() {
+        self.setState({
+          reports: [...updatedList],
+          pagination: lastVisible
         });
-    } else if (this.state.address) {
-      const self = this;
-      const reports = db
-        .collection('job-completion-report')
-        .where('jobLocation', '==', `${this.state.address.toString()}`)
-        .orderBy('date', 'desc')
-        .limit(5);
-      reports
-        .get()
-        .then(function(querySnapshot) {
-          if (querySnapshot.empty) {
-            alert('Address does not exist');
-            window.location = '/admin';
-          } else {
-            querySnapshot.forEach(function(doc) {
-              updatedList.push(doc.data());
-            });
-          }
-        })
-        .catch(function(e) {
-          console.log(e);
-        })
-        .finally(function() {
-          self.setState(
-            {
-              reports: updatedList
-            },
-            () => {
-              updatedList = [];
-            }
-          );
-        });
-    } else if (this.state.tech) {
-      const self = this;
-      const reports = db
-        .collection('job-completion-report')
-        .where('name', '==', `${this.state.tech.toString()}`)
-        .orderBy('date', 'desc')
-        .limit(5);
-      reports
-        .get()
-        .then(function(querySnapshot) {
-          if (querySnapshot.empty) {
-            alert('Tech does not exist');
-            window.location = '/admin';
-          } else {
-            querySnapshot.forEach(function(doc) {
-              updatedList.push(doc.data());
-            });
-          }
-        })
-        .catch(function(e) {
-          console.log(e);
-        })
-        .finally(function() {
-          self.setState(
-            {
-              reports: updatedList
-            },
-            () => {
-              updatedList = [];
-            }
-          );
-        });
-    } else if (this.state.bidArea) {
-      const self = this;
-      const reports = db
-        .collection('job-completion-report')
-        .where('bidZone', '==', `${this.state.bidArea.toString()}`)
-        .orderBy('date', 'desc')
-        .limit(5);
-      reports
-        .get()
-        .then(function(querySnapshot) {
-          if (querySnapshot.empty) {
-            alert('Resource does not exist');
-            window.location = '/admin';
-          } else {
-            querySnapshot.forEach(function(doc) {
-              updatedList.push(doc.data());
-            });
-          }
-        })
-        .catch(function(e) {
-          console.log(e);
-        })
-        .finally(function() {
-          self.setState(
-            {
-              reports: updatedList
-            },
-            () => {
-              updatedList = [];
-            }
-          );
-        });
-    } else if (
-      !this.state.id &&
-      !this.state.address &&
-      !this.state.tech &&
-      !this.state.bidArea
-    ) {
-      alert('Please enter a search parameter');
-    } else {
-      window.location = '/';
-    }
+      });
   }
   handleChange = e => {
     e.preventDefault();
     this.setState({ [e.target.name]: e.target.value });
   };
-  componentDidMount = async () => {
-    const self = this;
-    const reports = db
-      .collection('job-completion-report')
-      .orderBy('date', 'desc')
-      .limit(5);
-    reports
-      .get()
-      .then(async function(querySnapshot) {
-        console.log(querySnapshot);
-
-        await querySnapshot.forEach(function(doc) {
-          console.log(doc.data())
-          reportList.push(doc.data());
-          self.setState({
-            reports: reportList,
-            pagination: doc
-          });
-        });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+  componentDidMount = async () => {};
   componentDidUpdate(nextProps, nextState) {
     return this.state.reports !== nextState.reports;
   }
@@ -238,11 +102,11 @@ class AdminPage extends Component {
             handleChange={this.handleChange}
             bidArea={this.state.bidArea}
           />
-          <FilterComponent
+          {/* <FilterComponent
             label='ID'
             handleChange={this.handleChange}
             name='id'
-          />
+          /> */}
           {/* <FilterComponent
             label='Address'
             handleChange={this.handleChange}
@@ -271,17 +135,21 @@ class AdminPage extends Component {
               reports={this.state.reports}
             />
           </Grid>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Button
-              onClick={this.handlePagination}
-              variant='contained'
-              margin='normal'
-              color='primary'
-              type='submit'
-            >
-              Next 7
-            </Button>
-          </div>
+          {this.state.pagination ? (
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <Button
+                onClick={this.handlePagination}
+                variant='contained'
+                margin='normal'
+                color='primary'
+                type='submit'
+              >
+                Next 7
+              </Button>
+            </div>
+          ) : (
+            ''
+          )}
         </Grid>
       </Container>
     );

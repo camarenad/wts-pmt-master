@@ -283,7 +283,7 @@ const AdminComponent = props => {
               </Card>
             );
           })
-        : 'No Work Orders'}
+        : <h3 style={{textAlign:'center'}}>Please select a Bid Area</h3>}
     </div>
   );
   return page;
