@@ -46,7 +46,7 @@ const DropdownComponent = props => {
         }
       }}
 
-      helperText='Please select a bid area'
+      helperText='Search by area'
     >
       {locations.map(option => (
         <MenuItem key={option.value} value={option.value}>

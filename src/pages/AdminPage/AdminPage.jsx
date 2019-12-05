@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Grid, Button, Divider } from '@material-ui/core';
+import { Grid, Button, Divider, TextField } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import AdminComponent from '../../components/AdminComponent/AdminComponent';
 import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import firebase from '../../firebase/firebase';
 import 'firebase/auth';
 import DropdownComponent from '../../components/DropdownComponent/DropdownComponent';
+import getDate from '../../utils/getDate'
 
 const reportList = [];
 let updatedList = [];
@@ -24,7 +25,8 @@ class AdminPage extends Component {
       address: '',
       reports: null,
       bidArea: '',
-      user: firebase.auth().currentUser
+      user: firebase.auth().currentUser,
+      todaysDate: getDate()
     };
   }
   handlePagination(e) {
@@ -50,37 +52,58 @@ class AdminPage extends Component {
     });
   }
   async handleSubmit(e) {
-    e.preventDefault();
     const self = this;
-    let lastVisible = '';
-    updatedList = [];
-    const reports = db
-      .collection('job-completion-report')
-      .where('bidZone', '==', `${this.state.bidArea.toString()}`)
-      .orderBy('date', 'desc')
-      .limit(5);
-    reports
-      .get()
-      .then(function(querySnapshot) {
-        if (querySnapshot.empty) {
-          alert('Resource does not exist');
-          window.location = '/admin';
-        } else {
-          querySnapshot.forEach(function(doc) {
-            updatedList.push(doc.data());
+    e.preventDefault();
+    if (this.state.bidArea) {
+     
+      let lastVisible = '';
+      updatedList = [];
+      const reports = db
+        .collection('job-completion-report')
+        .where('bidZone', '==', `${this.state.bidArea.toString()}`)
+        .orderBy('date', 'desc')
+        .limit(5);
+      reports
+        .get()
+        .then(function(querySnapshot) {
+          if (querySnapshot.empty) {
+            alert('Resource does not exist');
+            window.location = '/admin';
+          } else {
+            querySnapshot.forEach(function(doc) {
+              updatedList.push(doc.data());
+            });
+            lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+          }
+        })
+        .catch(function(e) {
+          console.log(e);
+        })
+        .finally(function() {
+          self.setState({
+            reports: [...updatedList],
+            pagination: lastVisible
           });
-          lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
-        }
-      })
-      .catch(function(e) {
-        console.log(e);
-      })
-      .finally(function() {
-        self.setState({
-          reports: [...updatedList],
-          pagination: lastVisible
         });
-      });
+    } else if(this.state.date) {
+      var reports = db
+      .collection('job-completion-report')
+      // .orderBy('date', 'desc')
+      .where('date', '==', `${this.state.date.toString()}`)
+      .limit(5)
+      reports
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          updatedList.push(doc.data())
+          self.setState({
+            pagination: doc,
+            reports: [...updatedList]
+          });
+        })
+        
+      })
+    }
   }
   handleChange = e => {
     e.preventDefault();
@@ -90,6 +113,7 @@ class AdminPage extends Component {
   componentDidUpdate(nextProps, nextState) {
     return this.state.reports !== nextState.reports;
   }
+
   render() {
     return (
       <Container>
@@ -102,6 +126,19 @@ class AdminPage extends Component {
             handleChange={this.handleChange}
             bidArea={this.state.bidArea}
           />
+          <TextField
+            style={{margin:'40px 0'}}
+            id='date'
+            label='Date'
+            type='date'
+            name='date'
+            onChange={this.handleChange}
+            helperText='Search by date'
+            InputLabelProps={{
+              shrink: true
+            }}
+          />
+
           {/* <FilterComponent
             label='ID'
             handleChange={this.handleChange}
