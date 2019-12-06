@@ -54,7 +54,9 @@ class AdminPage extends Component {
   async handleSubmit(e) {
     const self = this;
     e.preventDefault();
-    if (this.state.bidArea && !this.state.date) {
+    if (!this.state.bidArea && !this.state.date) {
+      alert('Please enter a search item');
+    } else if (this.state.bidArea && !this.state.date) {
       let lastVisible = '';
       updatedList = [];
       const reports = db
@@ -84,8 +86,7 @@ class AdminPage extends Component {
             pagination: lastVisible
           });
         });
-    }
-    if (this.state.bidArea && this.state.date) {
+    } else if (this.state.bidArea && this.state.date) {
       // alert('run')
       updatedList = [];
       let lastVisible = '';
