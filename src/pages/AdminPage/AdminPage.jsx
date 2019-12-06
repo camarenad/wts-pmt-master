@@ -2,13 +2,13 @@ import React, { Component } from 'react';
 import { Grid, Button, Divider, TextField } from '@material-ui/core';
 import Container from '@material-ui/core/Container';
 import AdminComponent from '../../components/AdminComponent/AdminComponent';
-import FilterComponent from '../../components/FilterComponent/FilterComponent';
+// import FilterComponent from '../../components/FilterComponent/FilterComponent';
 import firebase from '../../firebase/firebase';
 import 'firebase/auth';
 import DropdownComponent from '../../components/DropdownComponent/DropdownComponent';
 import getDate from '../../utils/getDate';
 
-const reportList = [];
+// const reportList = [];
 let updatedList = [];
 const db = firebase.firestore();
 
@@ -30,7 +30,7 @@ class AdminPage extends Component {
     };
   }
   handlePagination(e) {
-    let lastVisible = '';
+    // let lastVisible = '';
     e.preventDefault();
     console.log('run');
     const self = this;
