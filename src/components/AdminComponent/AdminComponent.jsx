@@ -151,10 +151,6 @@ const AdminComponent = props => {
                     ) : (
                       ''
                     )}
-                    <Typography gutterBottom variant='subtitle2' component='h4'>
-                      USA Removal: Yes
-                    </Typography>
-                    <Divider style={spacerStyles} />
                     {item.jobComplete ? (
                       <div>
                         <Typography
